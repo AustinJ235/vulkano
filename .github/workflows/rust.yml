@@ -19,15 +19,15 @@ jobs:
         - name: windows-latest
           runs-on: windows-latest
           self-hosted: false
-          get-version: "Select-String -Pattern 'rust-version = "(.*?)"' -Path 'cargo.txt' | ForEach-Object {$_.Matches.Groups[1].Value}"
+          get-version: "Select-String -Pattern 'rust-version = \"(.*?)\"' -Path 'cargo.txt' | ForEach-Object {$_.Matches.Groups[1].Value}"
         - name: ubuntu-latest
           runs-on: ubuntu-latest
           self-hosted: false
-          get-version: "grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}'"
+          get-version: "grep 'rust-version' Cargo.toml | awk -F '\"' '{print $2}'"
         - name: macos-latest
           runs-on: macos-latest
           self-hosted: false
-          get-version: "grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}'"
+          get-version: "grep 'rust-version' Cargo.toml | awk -F '\"' '{print $2}'"
       fail-fast: false
     name: build / ${{ matrix.name }}
     runs-on: ${{ matrix.runs-on }}
@@ -51,15 +51,15 @@ jobs:
         - name: windows-latest
           runs-on: windows-latest
           self-hosted: false
-          get-version: "Select-String -Pattern 'rust-version = "(.*?)"' -Path 'cargo.txt' | ForEach-Object {$_.Matches.Groups[1].Value}"
+          get-version: "Select-String -Pattern 'rust-version = \"(.*?)\"' -Path 'cargo.txt' | ForEach-Object {$_.Matches.Groups[1].Value}"
         - name: ubuntu-latest
           runs-on: ubuntu-latest
           self-hosted: false
-          get-version: "grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}'"
+          get-version: "grep 'rust-version' Cargo.toml | awk -F '\"' '{print $2}'"
         - name: macos-latest
           runs-on: macos-latest
           self-hosted: false
-          get-version: "grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}'"
+          get-version: "grep 'rust-version' Cargo.toml | awk -F '\"' '{print $2}'"
       fail-fast: false
     name: clippy / ${{ matrix.name }}
     runs-on: ${{ matrix.runs-on }}
