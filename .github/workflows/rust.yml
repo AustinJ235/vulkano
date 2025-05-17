@@ -18,19 +18,22 @@ jobs:
         include:
         - name: windows-latest
           runs-on: windows-latest
-          self-hosted: true
+          self-hosted: false
+          get-version: "Select-String -Pattern 'rust-version = "(.*?)"' -Path 'cargo.txt' | ForEach-Object {$_.Matches.Groups[1].Value}"
         - name: ubuntu-latest
           runs-on: ubuntu-latest
           self-hosted: false
+          get-version: "grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}'"
         - name: macos-latest
           runs-on: macos-latest
           self-hosted: false
+          get-version: "grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}'"
       fail-fast: false
     name: build / ${{ matrix.name }}
     runs-on: ${{ matrix.runs-on }}
     steps:
     - uses: actions/checkout@v4
-    - run: rustup toolchain install $(grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}')
+    - run: rustup toolchain install $(${{ matrix.get_version }})
     - uses: Swatinem/rust-cache@v2
       if: ${{ ! matrix.self-hosted }}
       with:
@@ -46,20 +49,23 @@ jobs:
       matrix:
         include:
         - name: windows-latest
-          runs-on: [self-hosted, Windows]
-          self-hosted: true
+          runs-on: windows-latest
+          self-hosted: false
+          get-version: "Select-String -Pattern 'rust-version = "(.*?)"' -Path 'cargo.txt' | ForEach-Object {$_.Matches.Groups[1].Value}"
         - name: ubuntu-latest
           runs-on: ubuntu-latest
           self-hosted: false
+          get-version: "grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}'"
         - name: macos-latest
           runs-on: macos-latest
           self-hosted: false
+          get-version: "grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}'"
       fail-fast: false
     name: clippy / ${{ matrix.name }}
     runs-on: ${{ matrix.runs-on }}
     steps:
     - uses: actions/checkout@v4
-    - run: rustup toolchain install $(grep 'rust-version' Cargo.toml | awk -F '"' '{print $2}') --component clippy
+    - run: rustup toolchain install $(${{ matrix.get_version }}) --component clippy
     - uses: Swatinem/rust-cache@v2
       if: ${{ ! matrix.self-hosted }}
       with:
